@@ -2,31 +2,21 @@
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        
-        // Remove active class from all links
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        
-        // Add active class to clicked link
         link.classList.add('active');
-        
-        // Smooth scroll to section
         const targetId = link.getAttribute('href').substring(1);
         const targetSection = document.getElementById(targetId);
-        
         if (targetSection) {
             targetSection.scrollIntoView({ behavior: 'smooth' });
         }
     });
 });
 
-// Update active nav link on scroll
 window.addEventListener('scroll', () => {
     const sections = ['home', 'manifesto', 'operations', 'highlights', 'about', 'members', 'contact'];
-    
     sections.forEach(sectionId => {
         const section = document.getElementById(sectionId);
         const navLink = document.querySelector(`a[href="#${sectionId}"]`);
-        
         if (section) {
             const rect = section.getBoundingClientRect();
             if (rect.top <= 100 && rect.bottom >= 100) {
@@ -37,19 +27,15 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Form submission handler
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        // Get form values
         const codename = contactForm.querySelector('input[type="text"]').value;
         const email = contactForm.querySelector('input[type="email"]').value;
         const interest = contactForm.querySelector('select').value;
         const message = contactForm.querySelector('textarea').value;
         
-        // Show confirmation
         if (codename && email && interest && message) {
             alert(`TRANSMISSION SUCCESSFUL\n\nCodename: ${codename}\nEmail: ${email}\nInterest: ${interest}\n\nYour message has been encrypted and queued for network review.\n\nStay vigilant. Stay hidden.`);
             contactForm.reset();
@@ -59,38 +45,28 @@ if (contactForm) {
     });
 }
 
-// CTA button click handler
 const ctaBtn = document.querySelector('.cta-btn');
 if (ctaBtn) {
     ctaBtn.addEventListener('click', () => {
         alert('Thank you for your interest in joining Incognito.\n\nYour identity has been logged. An agent will contact you shortly.\n\nThe network is watching. The network is waiting.');
-        
-        // Scroll to contact section
         document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
     });
 }
 
-// Add glow effect to mouse position
 document.addEventListener('mousemove', (e) => {
     const cards = document.querySelectorAll('.manifesto-card, .op-item, .stat, .member-card');
-    
     cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
-        // Only apply if mouse is over the element
         if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-            // Apply white glow on hover
             card.style.boxShadow = `0 0 40px rgba(255, 255, 255, 0.4)`;
         } else {
-            // Remove glow when not hovering
             card.style.boxShadow = '';
         }
     });
 });
 
-// Member Live Status Object
 const memberLiveStatus = {
     'Nhilia Blanca': false,
     'Lucky Chan': false,
@@ -104,10 +80,8 @@ const memberLiveStatus = {
     'Tres Celestre': false
 };
 
-// Function to update member live status
 function setMemberLive(name, isLive) {
     memberLiveStatus[name] = isLive;
-    // Update card badge
     const nameMap = {
         'Nhilia Blanca': 'nhilia',
         'Lucky Chan': 'lucky',
@@ -130,7 +104,6 @@ function setMemberLive(name, isLive) {
     }
 }
 
-// Member Modal Functions
 function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
     const modal = document.getElementById('memberModal');
     document.getElementById('modalAvatar').textContent = avatar;
@@ -138,7 +111,6 @@ function openMemberModal(name, avatar, role, description, youtube = 'https://you
     document.getElementById('modalRole').textContent = role;
     document.getElementById('modalDescription').textContent = description;
     
-    // Handle Live Indicator
     const liveIndicator = document.getElementById('modalLiveIndicator');
     if (memberLiveStatus[name] || isLive) {
         liveIndicator.style.display = 'block';
@@ -146,33 +118,21 @@ function openMemberModal(name, avatar, role, description, youtube = 'https://you
         liveIndicator.style.display = 'none';
     }
     
-    // Handle YouTube link visibility
     const youtubeLink = document.getElementById('modalYoutube');
-    if (youtube) {
-        youtubeLink.href = youtube;
-        youtubeLink.style.display = 'inline-block';
-    } else {
-        youtubeLink.style.display = 'none';
-    }
+    youtubeLink.href = youtube;
+    youtubeLink.style.display = youtube ? 'inline-block' : 'none';
     
-    // Handle TikTok link visibility
     const tiktokLink = document.getElementById('modalTiktok');
-    if (tiktok) {
-        tiktokLink.href = tiktok;
-        tiktokLink.style.display = 'inline-block';
-    } else {
-        tiktokLink.style.display = 'none';
-    }
+    tiktokLink.href = tiktok;
+    tiktokLink.style.display = tiktok ? 'inline-block' : 'none';
     
     modal.style.display = 'block';
 }
 
 function closeMemberModal() {
-    const modal = document.getElementById('memberModal');
-    modal.style.display = 'none';
+    document.getElementById('memberModal').style.display = 'none';
 }
 
-// Close modal when clicking outside
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('memberModal');
     if (event.target === modal) {
@@ -180,10 +140,8 @@ window.addEventListener('click', (event) => {
     }
 });
 
-// Matrix rain effect on hero section (optional visual effect)
 const codeBlock = document.querySelector('.code-block');
 if (codeBlock) {
-    // Add occasional visual glitch effect
     setInterval(() => {
         if (Math.random() > 0.9) {
             codeBlock.style.opacity = '0.8';
@@ -194,7 +152,26 @@ if (codeBlock) {
     }, 1000);
 }
 
-// Console message for fun
+const highlightsSection = document.getElementById('highlights');
+if (highlightsSection) {
+    const highlightsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const videoContainer = entry.target.querySelector('.video-container');
+            if (videoContainer) {
+                if (entry.isIntersecting) {
+                    videoContainer.style.display = 'block';
+                } else {
+                    videoContainer.style.display = 'none';
+                }
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    highlightsObserver.observe(highlightsSection);
+}
+
 console.log('%cINCOGNITO - Underground Network', 'color: #00ff00; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #00ff00;');
 console.log('%cThe network is listening...', 'color: #ff0000; font-size: 14px;');
 console.log('%cAccess Level: RESTRICTED', 'color: #ffff00; font-size: 12px;');

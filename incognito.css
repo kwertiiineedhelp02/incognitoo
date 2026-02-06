@@ -76,7 +76,6 @@ main {
     z-index: 2;
 }
 
-/* Header */
 .header {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(10, 10, 10, 0.9));
     border-bottom: 3px solid var(--primary);
@@ -174,7 +173,6 @@ main {
     text-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
 }
 
-/* Navigation */
 .navbar {
     display: flex;
     justify-content: center;
@@ -224,9 +222,6 @@ main {
     color: var(--primary);
     border-bottom: 2px solid var(--primary);
 }
-
-/* Hero Section */
-.hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -307,8 +302,6 @@ main {
         opacity: 1;
     }
 }
-
-/* Manifesto Section */
 .manifesto {
     background: var(--card-bg);
     padding: 60px 40px;
@@ -370,8 +363,6 @@ main {
     color: var(--text-secondary);
     line-height: 1.6;
 }
-
-/* Operations Section */
 .operations {
     padding: 60px 40px;
     background: rgba(0, 0, 0, 0.3);
@@ -432,8 +423,6 @@ main {
     border-top: 1px solid var(--border-color);
     padding-top: 15px;
 }
-
-/* About Section */
 .about {
     padding: 60px 40px;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(10, 14, 39, 0.5));
@@ -502,8 +491,6 @@ main {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
-/* Highlights Section */
 .highlights {
     padding: 60px 20px;
     background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(40, 40, 40, 0.8));
@@ -684,8 +671,6 @@ main {
 .member-card {
     cursor: pointer;
 }
-
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -791,8 +776,6 @@ main {
         opacity: 1;
     }
 }
-
-/* Member Live Badge */
 .member-live-badge {
     position: absolute;
     top: 5px;
@@ -820,8 +803,6 @@ main {
         box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
     }
 }
-
-/* Modal Live Indicator */
 .modal-live-indicator {
     text-align: center;
     margin-bottom: 15px;
@@ -862,8 +843,6 @@ main {
         flex-direction: column;
     }
 }
-
-/* Elite Member Card */
 .member-card.elite {
     border-color: var(--accent);
     background: linear-gradient(135deg, rgba(200, 200, 200, 0.15), rgba(180, 180, 180, 0.1));
@@ -881,8 +860,6 @@ main {
     color: var(--accent);
     text-shadow: 0 0 10px rgba(180, 180, 180, 0.5);
 }
-
-/* Contact Section */
 .contact {
     padding: 60px 40px;
     background: var(--card-bg);
@@ -968,8 +945,6 @@ main {
 .submit-btn:active {
     transform: scale(0.98);
 }
-
-/* Footer */
 .footer {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(10, 10, 10, 0.9));
     border-top: 3px solid var(--primary);
@@ -1023,8 +998,6 @@ main {
     margin-top: 15px;
     opacity: 0.8;
 }
-
-/* Responsive Design */
 @media (max-width: 768px) {
     .logo {
         font-size: 2.5rem;
