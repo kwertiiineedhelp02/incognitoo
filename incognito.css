@@ -1017,6 +1017,13 @@ main {
     margin-top: 15px !important;
 }
 
+.developer {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 15px;
+    opacity: 0.8;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .logo {
