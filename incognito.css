@@ -1011,6 +1011,16 @@ main {
         grid-template-columns: 1fr;
         padding: 40px 20px;
         gap: 30px;
+        min-height: auto;
+    }
+
+    .manifesto,
+    .operations,
+    .about,
+    .highlights,
+    .contact,
+    .members {
+        padding: 50px 20px;
     }
 
     .hero-content h2 {
@@ -1051,10 +1061,15 @@ main {
 
     .hero {
         padding: 30px 15px;
+        gap: 20px;
     }
 
     .hero-content h2 {
         font-size: 1.5rem;
+    }
+
+    .hero-visual {
+        display: none;
     }
 
     .manifesto,
@@ -1062,7 +1077,21 @@ main {
     .about,
     .contact,
     .members {
-        padding: 40px 15px;
+        padding: 35px 15px;
+    }
+
+    .header {
+        padding: 25px 15px;
+    }
+
+    .logo-container {
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .logo-img {
+        width: 80px;
+        height: 80px;
     }
 
     .manifesto-grid {
@@ -1070,12 +1099,14 @@ main {
     }
 
     .navbar {
-        flex-direction: column;
-        gap: 10px;
+        gap: 8px;
+        padding: 12px;
+        flex-wrap: wrap;
     }
 
     .nav-link {
-        padding: 10px;
+        padding: 6px 8px;
+        font-size: 0.85rem;
     }
 
     .members-grid {
