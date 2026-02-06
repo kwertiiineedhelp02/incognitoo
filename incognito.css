@@ -222,6 +222,8 @@ main {
     color: var(--primary);
     border-bottom: 2px solid var(--primary);
 }
+
+.hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
