@@ -12,19 +12,27 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-window.addEventListener('scroll', () => {
-    const sections = ['home', 'manifesto', 'operations', 'about', 'highlights', 'members', 'contact'];
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        const navLink = document.querySelector(`a[href="#${sectionId}"]`);
-        if (section) {
-            const rect = section.getBoundingClientRect();
-            if (rect.top <= 100 && rect.bottom >= 100) {
-                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-                navLink.classList.add('active');
+const sections = ['home', 'manifesto', 'operations', 'about', 'highlights', 'members', 'contact'];
+
+const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`a[href="#${entry.target.id}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
             }
         }
     });
+}, {
+    threshold: 0.3
+});
+
+sections.forEach(sectionId => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        navObserver.observe(section);
+    }
 });
 
 const contactForm = document.querySelector('.contact-form');
