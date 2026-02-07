@@ -121,17 +121,6 @@ function setStreamingLive(name, isLive) {
     memberLiveStatus[name] = isLive;
     updateBadge(name, isLive);
     
-    try {
-        if (typeof firebase !== 'undefined' && firebase.database) {
-            const ref = firebase.database().ref(`streaming/${name}`);
-            ref.set({ isLive, timestamp: new Date().getTime() }).catch(err => {
-                console.log('Firebase save error:', err.message);
-            });
-        }
-    } catch (e) {
-        console.log('Firebase not available');
-    }
-    
     console.log(`✅ ${name} is ${isLive ? '🔴 LIVE' : '⚪ OFFLINE'}`);
 }
 
@@ -142,26 +131,7 @@ setTimeout(() => {
     console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
     console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
     console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
-    
-    try {
-        if (typeof firebase !== 'undefined' && firebase.database) {
-            const ref = firebase.database().ref('streaming');
-            ref.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    Object.keys(data).forEach(name => {
-                        if (memberLiveStatus.hasOwnProperty(name)) {
-                            memberLiveStatus[name] = data[name].isLive;
-                            updateBadge(name, data[name].isLive);
-                        }
-                    });
-                }
-            });
-        }
-    } catch (e) {
-        console.log('Firebase listener error:', e.message);
-    }
-}, 1000);
+}, 500);
 
 function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
     const modal = document.getElementById('memberModal');
