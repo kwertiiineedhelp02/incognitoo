@@ -169,14 +169,16 @@ if (highlightsSection) {
             const videoContainer = entry.target.querySelector('.video-container');
             if (videoContainer) {
                 if (entry.isIntersecting) {
-                    videoContainer.style.display = 'block';
+                    videoContainer.style.visibility = 'visible';
+                    videoContainer.style.opacity = '1';
                 } else {
-                    videoContainer.style.display = 'none';
+                    videoContainer.style.visibility = 'hidden';
+                    videoContainer.style.opacity = '0';
                 }
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.05
     });
     
     highlightsObserver.observe(highlightsSection);
