@@ -147,6 +147,20 @@ function updateBadge(name, isLive) {
             badge.classList.remove('active');
         }
     }
+    
+    const buttons = document.querySelectorAll('.stream-control');
+    buttons.forEach(btn => {
+        const cardText = btn.closest('.member-card').querySelector('h4').textContent;
+        if (cardText === name) {
+            if (isLive) {
+                btn.textContent = 'OFFLINE';
+                btn.classList.add('active');
+            } else {
+                btn.textContent = 'GO LIVE';
+                btn.classList.remove('active');
+            }
+        }
+    });
 }
 
 function setStreamingLive(name, isLive) {
@@ -170,7 +184,41 @@ function setStreamingLive(name, isLive) {
         });
 }
 
+function toggleStreaming(name) {
+    const isCurrentlyLive = memberLiveStatus[name];
+    const newStatus = !isCurrentlyLive;
+    setStreamingLive(name, newStatus);
+    
+    const nameMap = {
+        'Nhilia Blanca': 'nhilia',
+        'Lucky Chan': 'lucky',
+        'Kopi Blanca': 'kopi',
+        'Huzy Saj': 'huzy',
+        'Zouth West': 'zouth',
+        'Shuwa Garcia': 'shuwa',
+        'Mika Chu': 'mika',
+        'Mr. Wang': 'wang',
+        'Octa Rezee': 'octa',
+        'Tres Celestre': 'tres'
+    };
+    
+    const buttons = document.querySelectorAll('.stream-control');
+    buttons.forEach(btn => {
+        const cardText = btn.closest('.member-card').querySelector('h4').textContent;
+        if (cardText.includes(name)) {
+            if (newStatus) {
+                btn.textContent = 'OFFLINE';
+                btn.classList.add('active');
+            } else {
+                btn.textContent = 'GO LIVE';
+                btn.classList.remove('active');
+            }
+        }
+    });
+}
+
 window.setStreamingLive = setStreamingLive;
+window.toggleStreaming = toggleStreaming;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
 
 setTimeout(() => {
