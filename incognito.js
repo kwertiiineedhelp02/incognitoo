@@ -119,12 +119,22 @@ function openMemberModal(name, avatar, role, description, youtube = 'https://you
     }
     
     const youtubeLink = document.getElementById('modalYoutube');
-    youtubeLink.href = youtube;
-    youtubeLink.style.display = youtube ? 'inline-block' : 'none';
+    if (youtube && youtube.trim()) {
+        youtubeLink.href = youtube;
+        youtubeLink.target = '_blank';
+        youtubeLink.style.display = 'inline-block';
+    } else {
+        youtubeLink.style.display = 'none';
+    }
     
     const tiktokLink = document.getElementById('modalTiktok');
-    tiktokLink.href = tiktok;
-    tiktokLink.style.display = tiktok ? 'inline-block' : 'none';
+    if (tiktok && tiktok.trim()) {
+        tiktokLink.href = tiktok;
+        tiktokLink.target = '_blank';
+        tiktokLink.style.display = 'inline-block';
+    } else {
+        tiktokLink.style.display = 'none';
+    }
     
     modal.style.display = 'block';
 }
