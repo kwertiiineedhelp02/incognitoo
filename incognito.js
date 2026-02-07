@@ -1,4 +1,4 @@
-// Define global state FIRST
+// CRITICAL: Define state and functions FIRST before any other code
 const memberLiveStatus = {
     'Nhilia Blanca': false,
     'Lucky Chan': false,
@@ -12,20 +12,7 @@ const memberLiveStatus = {
     'Tres Celestre': false
 };
 
-const nameMap = {
-    'Nhilia Blanca': 'nhilia',
-    'Lucky Chan': 'lucky',
-    'Kopi Blanca': 'kopi',
-    'Huzy Saj': 'huzy',
-    'Zouth West': 'zouth',
-    'Shuwa Garcia': 'shuwa',
-    'Mika Chu': 'mika',
-    'Mr. Wang': 'wang',
-    'Octa Rezee': 'octa',
-    'Tres Celestre': 'tres'
-};
-
-// Define global functions FIRST so onclick attributes can access them
+// Make functions globally available IMMEDIATELY
 window.openMemberModal = function(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
     const modal = document.getElementById('memberModal');
     document.getElementById('modalAvatar').textContent = avatar;
@@ -182,6 +169,19 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
+const nameMap = {
+    'Nhilia Blanca': 'nhilia',
+    'Lucky Chan': 'lucky',
+    'Kopi Blanca': 'kopi',
+    'Huzy Saj': 'huzy',
+    'Zouth West': 'zouth',
+    'Shuwa Garcia': 'shuwa',
+    'Mika Chu': 'mika',
+    'Mr. Wang': 'wang',
+    'Octa Rezee': 'octa',
+    'Tres Celestre': 'tres'
+};
+
 function updateBadge(name, isLive) {
     const badge = document.getElementById(`live-${nameMap[name]}`);
     if (badge) {
@@ -228,6 +228,16 @@ function setStreamingLive(name, isLive) {
         });
 }
 
+window.setStreamingLive = setStreamingLive;
+window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
+
+setTimeout(() => {
+    console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
+    console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
+    console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
+    initStreamingTable();
+}, 500);
+
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('memberModal');
     if (event.target === modal) {
@@ -273,9 +283,3 @@ console.log('%cINCOGNITO - Underground Network', 'color: #00ff00; font-size: 20p
 console.log('%cThe network is listening...', 'color: #ff0000; font-size: 14px;');
 console.log('%cAccess Level: RESTRICTED', 'color: #ffff00; font-size: 12px;');
 console.log('%cWelcome, Agent. Don\'t let anyone trace this connection.', 'color: #00ff00; font-size: 12px;');
-
-// Final exports
-window.setStreamingLive = setStreamingLive;
-window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
-window.openMemberModal = openMemberModal;
-window.closeMemberModal = closeMemberModal;
