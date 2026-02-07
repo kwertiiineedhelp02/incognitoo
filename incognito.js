@@ -49,10 +49,6 @@ function closeAdminModal() {
     document.getElementById('adminPassword').value = '';
 }
 
-window.verifyAdminPassword = verifyAdminPassword;
-window.closeAdminModal = closeAdminModal;
-window.logoutAdmin = logoutAdmin;
-
 function logoutAdmin() {
     isAdminAuthenticated = false;
     localStorage.setItem('adminAuth', 'false');
@@ -60,6 +56,10 @@ function logoutAdmin() {
     showAdminModal();
     console.log('%c✅ LOGGED OUT', 'color: #ffff00; font-weight: bold;');
 }
+
+window.verifyAdminPassword = verifyAdminPassword;
+window.closeAdminModal = closeAdminModal;
+window.logoutAdmin = logoutAdmin;
 
 function showStreamingButtons() {
     document.querySelectorAll('.stream-control').forEach(btn => {
@@ -305,9 +305,13 @@ window.setStreamingLive = setStreamingLive;
 window.toggleStreaming = toggleStreaming;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        initAdminAuth();
+    });
+} else {
     initAdminAuth();
-});
+}
 
 setTimeout(() => {
     console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
