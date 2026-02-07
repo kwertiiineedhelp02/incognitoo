@@ -15,11 +15,8 @@ function initAdminAuth() {
     const savedAuth = localStorage.getItem('adminAuth');
     if (savedAuth === 'true') {
         isAdminAuthenticated = true;
-        hideAdminModal();
         showStreamingButtons();
-        updateAdminStatus();
     } else {
-        showAdminModal();
         hideStreamingButtons();
     }
 }
@@ -40,7 +37,6 @@ function verifyAdminPassword() {
         document.getElementById('adminPassword').value = '';
         hideAdminModal();
         showStreamingButtons();
-        updateAdminStatus();
         console.log('%c✅ ADMIN ACCESS GRANTED', 'color: #00ff00; font-weight: bold; font-size: 14px;');
     } else {
         alert('❌ INCORRECT PASSWORD');
@@ -56,7 +52,6 @@ function logoutAdmin() {
     isAdminAuthenticated = false;
     localStorage.setItem('adminAuth', 'false');
     hideStreamingButtons();
-    showAdminModal();
     console.log('%c✅ LOGGED OUT', 'color: #ffff00; font-weight: bold;');
 }
 
@@ -275,19 +270,6 @@ function toggleStreaming(name) {
     const isCurrentlyLive = memberLiveStatus[name];
     const newStatus = !isCurrentlyLive;
     setStreamingLive(name, newStatus);
-    
-    const nameMap = {
-        'Nhilia Blanca': 'nhilia',
-        'Lucky Chan': 'lucky',
-        'Kopi Blanca': 'kopi',
-        'Huzy Saj': 'huzy',
-        'Zouth West': 'zouth',
-        'Shuwa Garcia': 'shuwa',
-        'Mika Chu': 'mika',
-        'Mr. Wang': 'wang',
-        'Octa Rezee': 'octa',
-        'Tres Celestre': 'tres'
-    };
     
     const buttons = document.querySelectorAll('.stream-control');
     buttons.forEach(btn => {
