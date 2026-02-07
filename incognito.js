@@ -1,5 +1,7 @@
-// SIMPLE: Define functions at line 1
-window.openMemberModal = function(name, avatar, role, description, youtube, tiktok, isLive) {
+// ============================================================
+// MODAL FUNCTIONS - MUST BE FIRST
+// ============================================================
+window.openMemberModal = function(name, avatar, role, description, youtube, tiktok) {
     const modal = document.getElementById('memberModal');
     if (!modal) return;
     
@@ -11,14 +13,14 @@ window.openMemberModal = function(name, avatar, role, description, youtube, tikt
     const youtubeLink = document.getElementById('modalYoutube');
     const tiktokLink = document.getElementById('modalTiktok');
     
-    if (youtube) {
+    if (youtube && youtube.trim() !== '') {
         youtubeLink.href = youtube;
         youtubeLink.style.display = 'inline-block';
     } else {
         youtubeLink.style.display = 'none';
     }
     
-    if (tiktok) {
+    if (tiktok && tiktok.trim() !== '') {
         tiktokLink.href = tiktok;
         tiktokLink.style.display = 'inline-block';
     } else {
@@ -32,63 +34,6 @@ window.closeMemberModal = function() {
     const modal = document.getElementById('memberModal');
     if (modal) modal.style.display = 'none';
 };
-
-// CRITICAL: Define state and functions FIRST before any other code
-const memberLiveStatus = {
-    'Nhilia Blanca': false,
-    'Lucky Chan': false,
-    'Kopi Blanca': false,
-    'Huzy Saj': false,
-    'Zouth West': false,
-    'Shuwa Garcia': false,
-    'Mika Chu': false,
-    'Mr. Wang': false,
-    'Octa Rezee': false,
-    'Tres Celestre': false
-};
-
-// Make functions globally available IMMEDIATELY
-
-
-// Initialize Supabase
-const SUPABASE_URL = 'https://vwmpteniiopodigzwcxw.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_vEuHtjD_gfSWYOnORrr1Ew_e4HeKJX4';
-let supabase;
-if (window.supabase) {
-    const { createClient } = window.supabase;
-    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-}
-
-// Initialize Supabase streaming table if needed
-async function initStreamingTable() {
-    try {
-        const { data, error } = await supabase
-            .from('streaming')
-            .select('*')
-            .limit(1);
-        
-        if (!error) {
-            console.log('%c✅ Supabase connected', 'color: #00ff00; font-weight: bold;');
-            subscribeToStreamingUpdates();
-        }
-    } catch (err) {
-        console.log('%c⚠️ Supabase connection pending...', 'color: #ffff00;');
-    }
-}
-
-function subscribeToStreamingUpdates() {
-    supabase
-        .channel('streaming-updates')
-        .on('postgres_changes', 
-            { event: '*', schema: 'public', table: 'streaming' },
-            (payload) => {
-                const { name, is_live } = payload.new || payload.old;
-                memberLiveStatus[name] = is_live;
-                updateBadge(name, is_live);
-            }
-        )
-        .subscribe();
-}
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('.nav-link').forEach(link => {
@@ -167,75 +112,9 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-const nameMap = {
-    'Nhilia Blanca': 'nhilia',
-    'Lucky Chan': 'lucky',
-    'Kopi Blanca': 'kopi',
-    'Huzy Saj': 'huzy',
-    'Zouth West': 'zouth',
-    'Shuwa Garcia': 'shuwa',
-    'Mika Chu': 'mika',
-    'Mr. Wang': 'wang',
-    'Octa Rezee': 'octa',
-    'Tres Celestre': 'tres'
-};
-
-function updateBadge(name, isLive) {
-    const badge = document.getElementById(`live-${nameMap[name]}`);
-    if (badge) {
-        if (isLive) {
-            badge.classList.add('active');
-        } else {
-            badge.classList.remove('active');
-        }
-    }
-    
-    const buttons = document.querySelectorAll('.stream-control');
-    buttons.forEach(btn => {
-        const cardText = btn.closest('.member-card').querySelector('h4').textContent;
-        if (cardText === name) {
-            if (isLive) {
-                btn.textContent = 'OFFLINE';
-                btn.classList.add('active');
-            } else {
-                btn.textContent = 'GO LIVE';
-                btn.classList.remove('active');
-            }
-        }
-    });
-}
-
-function setStreamingLive(name, isLive) {
-    if (!memberLiveStatus.hasOwnProperty(name)) {
-        console.error(`❌ Member "${name}" not found. Available members:`, Object.keys(memberLiveStatus));
-        return;
-    }
-    
-    memberLiveStatus[name] = isLive;
-    updateBadge(name, isLive);
-    
-    // Save to Supabase
-    supabase
-        .from('streaming')
-        .upsert({ name: name, is_live: isLive, updated_at: new Date().toISOString() })
-        .then(() => {
-            console.log(`✅ ${name} is ${isLive ? '🔴 LIVE' : '⚪ OFFLINE'}`);
-        })
-        .catch((err) => {
-            console.error('❌ Failed to update Supabase:', err);
-        });
-}
-
-window.setStreamingLive = setStreamingLive;
-window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
-
-setTimeout(() => {
-    console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
-    console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
-    console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
-    initStreamingTable();
-}, 500);
-
+// ============================================================
+// MODAL CLICK OUTSIDE TO CLOSE
+// ============================================================
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('memberModal');
     if (event.target === modal) {
@@ -243,6 +122,9 @@ window.addEventListener('click', (event) => {
     }
 });
 
+// ============================================================
+// CODE BLOCK FLICKER EFFECT
+// ============================================================
 const codeBlock = document.querySelector('.code-block');
 if (codeBlock) {
     setInterval(() => {
