@@ -388,3 +388,11 @@ console.log('%cINCOGNITO - Underground Network', 'color: #00ff00; font-size: 20p
 console.log('%cThe network is listening...', 'color: #ff0000; font-size: 14px;');
 console.log('%cAccess Level: RESTRICTED', 'color: #ffff00; font-size: 12px;');
 console.log('%cWelcome, Agent. Don\'t let anyone trace this connection.', 'color: #00ff00; font-size: 12px;');
+
+// Final exports - ensure all functions are available globally
+if (typeof toggleStreaming !== 'undefined') {
+    window.toggleStreaming = toggleStreaming;
+}
+if (typeof verifyAdminPassword !== 'undefined') {
+    window.verifyAdminPassword = verifyAdminPassword;
+}
