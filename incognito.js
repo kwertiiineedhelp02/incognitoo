@@ -1,3 +1,70 @@
+// Define global state FIRST
+const memberLiveStatus = {
+    'Nhilia Blanca': false,
+    'Lucky Chan': false,
+    'Kopi Blanca': false,
+    'Huzy Saj': false,
+    'Zouth West': false,
+    'Shuwa Garcia': false,
+    'Mika Chu': false,
+    'Mr. Wang': false,
+    'Octa Rezee': false,
+    'Tres Celestre': false
+};
+
+const nameMap = {
+    'Nhilia Blanca': 'nhilia',
+    'Lucky Chan': 'lucky',
+    'Kopi Blanca': 'kopi',
+    'Huzy Saj': 'huzy',
+    'Zouth West': 'zouth',
+    'Shuwa Garcia': 'shuwa',
+    'Mika Chu': 'mika',
+    'Mr. Wang': 'wang',
+    'Octa Rezee': 'octa',
+    'Tres Celestre': 'tres'
+};
+
+// Define global functions FIRST so onclick attributes can access them
+window.openMemberModal = function(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
+    const modal = document.getElementById('memberModal');
+    document.getElementById('modalAvatar').textContent = avatar;
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalRole').textContent = role;
+    document.getElementById('modalDescription').textContent = description;
+    
+    const liveIndicator = document.getElementById('modalLiveIndicator');
+    if (memberLiveStatus[name] || isLive) {
+        liveIndicator.style.display = 'block';
+    } else {
+        liveIndicator.style.display = 'none';
+    }
+    
+    const youtubeLink = document.getElementById('modalYoutube');
+    if (youtube && youtube.trim()) {
+        youtubeLink.href = youtube;
+        youtubeLink.target = '_blank';
+        youtubeLink.style.display = 'inline-block';
+    } else {
+        youtubeLink.style.display = 'none';
+    }
+    
+    const tiktokLink = document.getElementById('modalTiktok');
+    if (tiktok && tiktok.trim()) {
+        tiktokLink.href = tiktok;
+        tiktokLink.target = '_blank';
+        tiktokLink.style.display = 'inline-block';
+    } else {
+        tiktokLink.style.display = 'none';
+    }
+    
+    modal.style.display = 'block';
+};
+
+window.closeMemberModal = function() {
+    document.getElementById('memberModal').style.display = 'none';
+};
+
 // Initialize Supabase
 const SUPABASE_URL = 'https://vwmpteniiopodigzwcxw.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_vEuHtjD_gfSWYOnORrr1Ew_e4HeKJX4';
@@ -115,32 +182,6 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-const memberLiveStatus = {
-    'Nhilia Blanca': false,
-    'Lucky Chan': false,
-    'Kopi Blanca': false,
-    'Huzy Saj': false,
-    'Zouth West': false,
-    'Shuwa Garcia': false,
-    'Mika Chu': false,
-    'Mr. Wang': false,
-    'Octa Rezee': false,
-    'Tres Celestre': false
-};
-
-const nameMap = {
-    'Nhilia Blanca': 'nhilia',
-    'Lucky Chan': 'lucky',
-    'Kopi Blanca': 'kopi',
-    'Huzy Saj': 'huzy',
-    'Zouth West': 'zouth',
-    'Shuwa Garcia': 'shuwa',
-    'Mika Chu': 'mika',
-    'Mr. Wang': 'wang',
-    'Octa Rezee': 'octa',
-    'Tres Celestre': 'tres'
-};
-
 function updateBadge(name, isLive) {
     const badge = document.getElementById(`live-${nameMap[name]}`);
     if (badge) {
@@ -185,55 +226,6 @@ function setStreamingLive(name, isLive) {
         .catch((err) => {
             console.error('❌ Failed to update Supabase:', err);
         });
-}
-
-window.setStreamingLive = setStreamingLive;
-window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
-
-setTimeout(() => {
-    console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
-    console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
-    console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
-    initStreamingTable();
-}, 500);
-
-function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
-    const modal = document.getElementById('memberModal');
-    document.getElementById('modalAvatar').textContent = avatar;
-    document.getElementById('modalName').textContent = name;
-    document.getElementById('modalRole').textContent = role;
-    document.getElementById('modalDescription').textContent = description;
-    
-    const liveIndicator = document.getElementById('modalLiveIndicator');
-    if (memberLiveStatus[name] || isLive) {
-        liveIndicator.style.display = 'block';
-    } else {
-        liveIndicator.style.display = 'none';
-    }
-    
-    const youtubeLink = document.getElementById('modalYoutube');
-    if (youtube && youtube.trim()) {
-        youtubeLink.href = youtube;
-        youtubeLink.target = '_blank';
-        youtubeLink.style.display = 'inline-block';
-    } else {
-        youtubeLink.style.display = 'none';
-    }
-    
-    const tiktokLink = document.getElementById('modalTiktok');
-    if (tiktok && tiktok.trim()) {
-        tiktokLink.href = tiktok;
-        tiktokLink.target = '_blank';
-        tiktokLink.style.display = 'inline-block';
-    } else {
-        tiktokLink.style.display = 'none';
-    }
-    
-    modal.style.display = 'block';
-}
-
-function closeMemberModal() {
-    document.getElementById('memberModal').style.display = 'none';
 }
 
 window.addEventListener('click', (event) => {
