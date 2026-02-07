@@ -1,3 +1,38 @@
+// SIMPLE: Define functions at line 1
+window.openMemberModal = function(name, avatar, role, description, youtube, tiktok, isLive) {
+    const modal = document.getElementById('memberModal');
+    if (!modal) return;
+    
+    document.getElementById('modalAvatar').textContent = avatar;
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalRole').textContent = role;
+    document.getElementById('modalDescription').textContent = description;
+    
+    const youtubeLink = document.getElementById('modalYoutube');
+    const tiktokLink = document.getElementById('modalTiktok');
+    
+    if (youtube) {
+        youtubeLink.href = youtube;
+        youtubeLink.style.display = 'inline-block';
+    } else {
+        youtubeLink.style.display = 'none';
+    }
+    
+    if (tiktok) {
+        tiktokLink.href = tiktok;
+        tiktokLink.style.display = 'inline-block';
+    } else {
+        tiktokLink.style.display = 'none';
+    }
+    
+    modal.style.display = 'block';
+};
+
+window.closeMemberModal = function() {
+    const modal = document.getElementById('memberModal');
+    if (modal) modal.style.display = 'none';
+};
+
 // CRITICAL: Define state and functions FIRST before any other code
 const memberLiveStatus = {
     'Nhilia Blanca': false,
@@ -13,44 +48,7 @@ const memberLiveStatus = {
 };
 
 // Make functions globally available IMMEDIATELY
-window.openMemberModal = function(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
-    const modal = document.getElementById('memberModal');
-    document.getElementById('modalAvatar').textContent = avatar;
-    document.getElementById('modalName').textContent = name;
-    document.getElementById('modalRole').textContent = role;
-    document.getElementById('modalDescription').textContent = description;
-    
-    const liveIndicator = document.getElementById('modalLiveIndicator');
-    if (memberLiveStatus[name] || isLive) {
-        liveIndicator.style.display = 'block';
-    } else {
-        liveIndicator.style.display = 'none';
-    }
-    
-    const youtubeLink = document.getElementById('modalYoutube');
-    if (youtube && youtube.trim()) {
-        youtubeLink.href = youtube;
-        youtubeLink.target = '_blank';
-        youtubeLink.style.display = 'inline-block';
-    } else {
-        youtubeLink.style.display = 'none';
-    }
-    
-    const tiktokLink = document.getElementById('modalTiktok');
-    if (tiktok && tiktok.trim()) {
-        tiktokLink.href = tiktok;
-        tiktokLink.target = '_blank';
-        tiktokLink.style.display = 'inline-block';
-    } else {
-        tiktokLink.style.display = 'none';
-    }
-    
-    modal.style.display = 'block';
-};
 
-window.closeMemberModal = function() {
-    document.getElementById('memberModal').style.display = 'none';
-};
 
 // Initialize Supabase
 const SUPABASE_URL = 'https://vwmpteniiopodigzwcxw.supabase.co';
