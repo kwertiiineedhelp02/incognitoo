@@ -285,3 +285,5 @@ console.log('%cWelcome, Agent. Don\'t let anyone trace this connection.', 'color
 // Final exports
 window.setStreamingLive = setStreamingLive;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
+window.openMemberModal = openMemberModal;
+window.closeMemberModal = closeMemberModal;
