@@ -1,3 +1,40 @@
+// Initialize Supabase
+const SUPABASE_URL = 'https://vwmpteniiopodigzwcxw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_vEuHtjD_gfSWYOnORrr1Ew_e4HeKJX4';
+const { createClient } = window.supabase;
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Initialize streaming table if needed
+async function initStreamingTable() {
+    try {
+        const { data, error } = await supabase
+            .from('streaming')
+            .select('*')
+            .limit(1);
+        
+        if (!error) {
+            console.log('%c✅ Supabase connected', 'color: #00ff00; font-weight: bold;');
+            subscribeToStreamingUpdates();
+        }
+    } catch (err) {
+        console.log('%c⚠️ Supabase connection pending...', 'color: #ffff00;');
+    }
+}
+
+function subscribeToStreamingUpdates() {
+    supabase
+        .channel('streaming-updates')
+        .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'streaming' },
+            (payload) => {
+                const { name, is_live } = payload.new || payload.old;
+                memberLiveStatus[name] = is_live;
+                updateBadge(name, is_live);
+            }
+        )
+        .subscribe();
+}
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -121,7 +158,16 @@ function setStreamingLive(name, isLive) {
     memberLiveStatus[name] = isLive;
     updateBadge(name, isLive);
     
-    console.log(`✅ ${name} is ${isLive ? '🔴 LIVE' : '⚪ OFFLINE'}`);
+    // Save to Supabase
+    supabase
+        .from('streaming')
+        .upsert({ name: name, is_live: isLive, updated_at: new Date().toISOString() })
+        .then(() => {
+            console.log(`✅ ${name} is ${isLive ? '🔴 LIVE' : '⚪ OFFLINE'}`);
+        })
+        .catch((err) => {
+            console.error('❌ Failed to update Supabase:', err);
+        });
 }
 
 window.setStreamingLive = setStreamingLive;
@@ -131,6 +177,7 @@ setTimeout(() => {
     console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
     console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
     console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
+    initStreamingTable();
 }, 500);
 
 function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
