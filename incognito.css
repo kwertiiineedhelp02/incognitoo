@@ -1000,6 +1000,21 @@ main {
     margin-top: 15px;
     opacity: 0.8;
 }
+
+.discord-link {
+    color: #7289da;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(114, 137, 218, 0.5);
+}
+
+.discord-link:hover {
+    color: #99aaf7;
+    text-shadow: 0 0 15px rgba(114, 137, 218, 0.8);
+    transform: scale(1.05);
+}
+
 @media (max-width: 768px) {
     .logo {
         font-size: 2.5rem;
