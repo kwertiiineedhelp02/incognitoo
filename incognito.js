@@ -117,17 +117,10 @@ function setStreamingLive(name, isLive) {
     updateBadge(name, isLive);
     
     if (window.firebaseDb) {
-        const { ref, set } = window.firebaseModules || {};
-        if (!ref) {
-            import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
-                window.firebaseModules = module;
-                const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
-                module.set(dbRef, { isLive, timestamp: new Date().getTime() });
-            });
-        } else {
-            const dbRef = ref(window.firebaseDb, `streaming/${name}`);
-            set(dbRef, { isLive, timestamp: new Date().getTime() });
-        }
+        import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
+            const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
+            module.set(dbRef, { isLive, timestamp: new Date().getTime() });
+        });
     }
     
     console.log(`%c${name} is ${isLive ? 'LIVE' : 'OFFLINE'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #ff0000; font-size: 14px;');
@@ -136,6 +129,9 @@ function setStreamingLive(name, isLive) {
 function setMemberLive(name, isLive) {
     setStreamingLive(name, isLive);
 }
+
+window.setStreamingLive = setStreamingLive;
+window.setMemberLive = setMemberLive;
 
 if (window.firebaseDb) {
     import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
