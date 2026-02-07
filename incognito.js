@@ -116,22 +116,24 @@ function setStreamingLive(name, isLive) {
     memberLiveStatus[name] = isLive;
     updateBadge(name, isLive);
     
-    if (window.firebaseDb) {
-        import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
-            const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
-            module.set(dbRef, { isLive, timestamp: new Date().getTime() });
-        });
+    try {
+        if (window.firebaseDb) {
+            import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
+                const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
+                module.set(dbRef, { isLive, timestamp: new Date().getTime() });
+            }).catch(e => console.log('Firebase error:', e));
+        }
+    } catch (e) {
+        console.log('Firebase not available');
     }
     
     console.log(`%c${name} is ${isLive ? 'LIVE' : 'OFFLINE'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #ff0000; font-size: 14px;');
 }
 
-function setMemberLive(name, isLive) {
-    setStreamingLive(name, isLive);
-}
-
 window.setStreamingLive = setStreamingLive;
-window.setMemberLive = setMemberLive;
+window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
+
+console.log('%cIncognito console ready. Use: setStreamingLive(\'Name\', true)', 'color: #00ff00; font-size: 12px;');
 
 if (window.firebaseDb) {
     import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
