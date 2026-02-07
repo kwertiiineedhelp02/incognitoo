@@ -1,8 +1,11 @@
 // Initialize Supabase
 const SUPABASE_URL = 'https://vwmpteniiopodigzwcxw.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_vEuHtjD_gfSWYOnORrr1Ew_e4HeKJX4';
-const { createClient } = window.supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabase;
+if (window.supabase) {
+    const { createClient } = window.supabase;
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+}
 
 // Admin authentication
 const ADMIN_PASSWORD = 'incognito'; // Change this to your desired password
