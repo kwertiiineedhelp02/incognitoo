@@ -13,7 +13,7 @@ document.querySelectorAll('.nav-link').forEach(link => {
 });
 
 window.addEventListener('scroll', () => {
-    const sections = ['home', 'manifesto', 'operations', 'highlights', 'about', 'members', 'contact'];
+    const sections = ['home', 'manifesto', 'operations', 'about', 'highlights', 'members', 'contact'];
     sections.forEach(sectionId => {
         const section = document.getElementById(sectionId);
         const navLink = document.querySelector(`a[href="#${sectionId}"]`);
