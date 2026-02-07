@@ -88,20 +88,20 @@ const memberLiveStatus = {
     'Tres Celestre': false
 };
 
-function setMemberLive(name, isLive) {
-    memberLiveStatus[name] = isLive;
-    const nameMap = {
-        'Nhilia Blanca': 'nhilia',
-        'Lucky Chan': 'lucky',
-        'Kopi Blanca': 'kopi',
-        'Huzy Saj': 'huzy',
-        'Zouth West': 'zouth',
-        'Shuwa Garcia': 'shuwa',
-        'Mika Chu': 'mika',
-        'Mr. Wang': 'wang',
-        'Octa Rezee': 'octa',
-        'Tres Celestre': 'tres'
-    };
+const nameMap = {
+    'Nhilia Blanca': 'nhilia',
+    'Lucky Chan': 'lucky',
+    'Kopi Blanca': 'kopi',
+    'Huzy Saj': 'huzy',
+    'Zouth West': 'zouth',
+    'Shuwa Garcia': 'shuwa',
+    'Mika Chu': 'mika',
+    'Mr. Wang': 'wang',
+    'Octa Rezee': 'octa',
+    'Tres Celestre': 'tres'
+};
+
+function updateBadge(name, isLive) {
     const badge = document.getElementById(`live-${nameMap[name]}`);
     if (badge) {
         if (isLive) {
@@ -110,6 +110,49 @@ function setMemberLive(name, isLive) {
             badge.classList.remove('active');
         }
     }
+}
+
+function setStreamingLive(name, isLive) {
+    memberLiveStatus[name] = isLive;
+    updateBadge(name, isLive);
+    
+    if (window.firebaseDb) {
+        const { ref, set } = window.firebaseModules || {};
+        if (!ref) {
+            import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
+                window.firebaseModules = module;
+                const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
+                module.set(dbRef, { isLive, timestamp: new Date().getTime() });
+            });
+        } else {
+            const dbRef = ref(window.firebaseDb, `streaming/${name}`);
+            set(dbRef, { isLive, timestamp: new Date().getTime() });
+        }
+    }
+    
+    console.log(`%c${name} is ${isLive ? 'LIVE' : 'OFFLINE'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #ff0000; font-size: 14px;');
+}
+
+function setMemberLive(name, isLive) {
+    setStreamingLive(name, isLive);
+}
+
+if (window.firebaseDb) {
+    import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
+        const { ref, onValue } = module;
+        const streamRef = ref(window.firebaseDb, 'streaming');
+        onValue(streamRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach(name => {
+                    if (memberLiveStatus.hasOwnProperty(name)) {
+                        memberLiveStatus[name] = data[name].isLive;
+                        updateBadge(name, data[name].isLive);
+                    }
+                });
+            }
+        });
+    });
 }
 
 function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
