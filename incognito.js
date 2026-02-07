@@ -113,45 +113,25 @@ function updateBadge(name, isLive) {
 }
 
 function setStreamingLive(name, isLive) {
+    if (!memberLiveStatus.hasOwnProperty(name)) {
+        console.log(`%cError: Member "${name}" not found`, 'color: #ff0000;');
+        return;
+    }
+    
     memberLiveStatus[name] = isLive;
     updateBadge(name, isLive);
     
-    try {
-        if (window.firebaseDb) {
-            import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
-                const dbRef = module.ref(window.firebaseDb, `streaming/${name}`);
-                module.set(dbRef, { isLive, timestamp: new Date().getTime() });
-            }).catch(e => console.log('Firebase error:', e));
-        }
-    } catch (e) {
-        console.log('Firebase not available');
-    }
-    
-    console.log(`%c${name} is ${isLive ? 'LIVE' : 'OFFLINE'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #ff0000; font-size: 14px;');
+    console.log(`%c${name} is ${isLive ? 'LIVE 🔴' : 'OFFLINE⚪'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #aaaaaa; font-size: 14px;');
 }
 
 window.setStreamingLive = setStreamingLive;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
 
-console.log('%cIncognito console ready. Use: setStreamingLive(\'Name\', true)', 'color: #00ff00; font-size: 12px;');
-
-if (window.firebaseDb) {
-    import('https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js').then(module => {
-        const { ref, onValue } = module;
-        const streamRef = ref(window.firebaseDb, 'streaming');
-        onValue(streamRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                Object.keys(data).forEach(name => {
-                    if (memberLiveStatus.hasOwnProperty(name)) {
-                        memberLiveStatus[name] = data[name].isLive;
-                        updateBadge(name, data[name].isLive);
-                    }
-                });
-            }
-        });
-    });
-}
+setTimeout(() => {
+    console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
+    console.log('%cUse: setStreamingLive(\'Name\', true/false)', 'color: #00ff00; font-size: 12px;');
+    console.log('%cExample: setStreamingLive(\'Shuwa Garcia\', true)', 'color: #ffff00; font-size: 12px;');
+}, 500);
 
 function openMemberModal(name, avatar, role, description, youtube = 'https://youtube.com', tiktok = 'https://tiktok.com', isLive = false) {
     const modal = document.getElementById('memberModal');
