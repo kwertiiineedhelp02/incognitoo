@@ -55,10 +55,6 @@ function logoutAdmin() {
     console.log('%c✅ LOGGED OUT', 'color: #ffff00; font-weight: bold;');
 }
 
-window.verifyAdminPassword = verifyAdminPassword;
-window.closeAdminModal = closeAdminModal;
-window.logoutAdmin = logoutAdmin;
-
 function showStreamingButtons() {
     document.querySelectorAll('.stream-control').forEach(btn => {
         btn.classList.remove('hidden');
@@ -289,6 +285,9 @@ function toggleStreaming(name) {
 window.setStreamingLive = setStreamingLive;
 window.toggleStreaming = toggleStreaming;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
+window.verifyAdminPassword = verifyAdminPassword;
+window.closeAdminModal = closeAdminModal;
+window.logoutAdmin = logoutAdmin;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
