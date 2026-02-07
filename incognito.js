@@ -114,14 +114,14 @@ function updateBadge(name, isLive) {
 
 function setStreamingLive(name, isLive) {
     if (!memberLiveStatus.hasOwnProperty(name)) {
-        console.log(`%cError: Member "${name}" not found`, 'color: #ff0000;');
+        console.error(`❌ Member "${name}" not found. Available members:`, Object.keys(memberLiveStatus));
         return;
     }
     
     memberLiveStatus[name] = isLive;
     updateBadge(name, isLive);
     
-    console.log(`%c${name} is ${isLive ? 'LIVE 🔴' : 'OFFLINE⚪'}`, isLive ? 'color: #00ff00; font-size: 14px; font-weight: bold;' : 'color: #aaaaaa; font-size: 14px;');
+    console.log(`✅ ${name} is ${isLive ? '🔴 LIVE' : '⚪ OFFLINE'}`, memberLiveStatus);
 }
 
 window.setStreamingLive = setStreamingLive;
