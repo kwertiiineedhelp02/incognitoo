@@ -7,76 +7,6 @@ if (window.supabase) {
     supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
-// Admin authentication
-const ADMIN_PASSWORD = 'incognito'; // Change this to your desired password
-let isAdminAuthenticated = false;
-
-function initAdminAuth() {
-    const savedAuth = localStorage.getItem('adminAuth');
-    if (savedAuth === 'true') {
-        isAdminAuthenticated = true;
-        showStreamingButtons();
-    } else {
-        hideStreamingButtons();
-    }
-}
-
-function showAdminModal() {
-    document.getElementById('adminModal').style.display = 'flex';
-}
-
-function hideAdminModal() {
-    document.getElementById('adminModal').style.display = 'none';
-}
-
-function verifyAdminPassword() {
-    const password = document.getElementById('adminPassword').value;
-    if (password === ADMIN_PASSWORD) {
-        isAdminAuthenticated = true;
-        localStorage.setItem('adminAuth', 'true');
-        document.getElementById('adminPassword').value = '';
-        hideAdminModal();
-        showStreamingButtons();
-        console.log('%c✅ ADMIN ACCESS GRANTED', 'color: #00ff00; font-weight: bold; font-size: 14px;');
-    } else {
-        alert('❌ INCORRECT PASSWORD');
-        document.getElementById('adminPassword').value = '';
-    }
-}
-
-function closeAdminModal() {
-    document.getElementById('adminPassword').value = '';
-}
-
-function logoutAdmin() {
-    isAdminAuthenticated = false;
-    localStorage.setItem('adminAuth', 'false');
-    hideStreamingButtons();
-    console.log('%c✅ LOGGED OUT', 'color: #ffff00; font-weight: bold;');
-}
-
-function showStreamingButtons() {
-    document.querySelectorAll('.stream-control').forEach(btn => {
-        btn.classList.remove('hidden');
-    });
-    document.getElementById('adminLogout').style.display = 'block';
-}
-
-function hideStreamingButtons() {
-    document.querySelectorAll('.stream-control').forEach(btn => {
-        btn.classList.add('hidden');
-    });
-    document.getElementById('adminLogout').style.display = 'none';
-}
-
-function updateAdminStatus() {
-    if (isAdminAuthenticated) {
-        document.getElementById('adminLogout').style.display = 'block';
-    } else {
-        document.getElementById('adminLogout').style.display = 'none';
-    }
-}
-
 // Initialize Supabase streaming table if needed
 async function initStreamingTable() {
     try {
@@ -257,45 +187,8 @@ function setStreamingLive(name, isLive) {
         });
 }
 
-function toggleStreaming(name) {
-    if (!isAdminAuthenticated) {
-        showAdminModal();
-        return;
-    }
-    
-    const isCurrentlyLive = memberLiveStatus[name];
-    const newStatus = !isCurrentlyLive;
-    setStreamingLive(name, newStatus);
-    
-    const buttons = document.querySelectorAll('.stream-control');
-    buttons.forEach(btn => {
-        const cardText = btn.closest('.member-card').querySelector('h4').textContent;
-        if (cardText.includes(name)) {
-            if (newStatus) {
-                btn.textContent = 'OFFLINE';
-                btn.classList.add('active');
-            } else {
-                btn.textContent = 'GO LIVE';
-                btn.classList.remove('active');
-            }
-        }
-    });
-}
-
 window.setStreamingLive = setStreamingLive;
-window.toggleStreaming = toggleStreaming;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
-window.verifyAdminPassword = verifyAdminPassword;
-window.closeAdminModal = closeAdminModal;
-window.logoutAdmin = logoutAdmin;
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        initAdminAuth();
-    });
-} else {
-    initAdminAuth();
-}
 
 setTimeout(() => {
     console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
@@ -388,11 +281,3 @@ console.log('%cINCOGNITO - Underground Network', 'color: #00ff00; font-size: 20p
 console.log('%cThe network is listening...', 'color: #ff0000; font-size: 14px;');
 console.log('%cAccess Level: RESTRICTED', 'color: #ffff00; font-size: 12px;');
 console.log('%cWelcome, Agent. Don\'t let anyone trace this connection.', 'color: #00ff00; font-size: 12px;');
-
-// Final exports - ensure all functions are available globally
-if (typeof toggleStreaming !== 'undefined') {
-    window.toggleStreaming = toggleStreaming;
-}
-if (typeof verifyAdminPassword !== 'undefined') {
-    window.verifyAdminPassword = verifyAdminPassword;
-}
