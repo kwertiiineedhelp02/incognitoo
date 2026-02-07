@@ -4,7 +4,86 @@ const SUPABASE_KEY = 'sb_publishable_vEuHtjD_gfSWYOnORrr1Ew_e4HeKJX4';
 const { createClient } = window.supabase;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Initialize streaming table if needed
+// Admin authentication
+const ADMIN_PASSWORD = 'incognito'; // Change this to your desired password
+let isAdminAuthenticated = false;
+
+function initAdminAuth() {
+    const savedAuth = localStorage.getItem('adminAuth');
+    if (savedAuth === 'true') {
+        isAdminAuthenticated = true;
+        hideAdminModal();
+        showStreamingButtons();
+        updateAdminStatus();
+    } else {
+        showAdminModal();
+        hideStreamingButtons();
+    }
+}
+
+function showAdminModal() {
+    document.getElementById('adminModal').style.display = 'flex';
+}
+
+function hideAdminModal() {
+    document.getElementById('adminModal').style.display = 'none';
+}
+
+function verifyAdminPassword() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === ADMIN_PASSWORD) {
+        isAdminAuthenticated = true;
+        localStorage.setItem('adminAuth', 'true');
+        document.getElementById('adminPassword').value = '';
+        hideAdminModal();
+        showStreamingButtons();
+        updateAdminStatus();
+        console.log('%c✅ ADMIN ACCESS GRANTED', 'color: #00ff00; font-weight: bold; font-size: 14px;');
+    } else {
+        alert('❌ INCORRECT PASSWORD');
+        document.getElementById('adminPassword').value = '';
+    }
+}
+
+function closeAdminModal() {
+    document.getElementById('adminPassword').value = '';
+}
+
+window.verifyAdminPassword = verifyAdminPassword;
+window.closeAdminModal = closeAdminModal;
+window.logoutAdmin = logoutAdmin;
+
+function logoutAdmin() {
+    isAdminAuthenticated = false;
+    localStorage.setItem('adminAuth', 'false');
+    hideStreamingButtons();
+    showAdminModal();
+    console.log('%c✅ LOGGED OUT', 'color: #ffff00; font-weight: bold;');
+}
+
+function showStreamingButtons() {
+    document.querySelectorAll('.stream-control').forEach(btn => {
+        btn.classList.remove('hidden');
+    });
+    document.getElementById('adminLogout').style.display = 'block';
+}
+
+function hideStreamingButtons() {
+    document.querySelectorAll('.stream-control').forEach(btn => {
+        btn.classList.add('hidden');
+    });
+    document.getElementById('adminLogout').style.display = 'none';
+}
+
+function updateAdminStatus() {
+    if (isAdminAuthenticated) {
+        document.getElementById('adminLogout').style.display = 'block';
+    } else {
+        document.getElementById('adminLogout').style.display = 'none';
+    }
+}
+
+// Initialize Supabase streaming table if needed
 async function initStreamingTable() {
     try {
         const { data, error } = await supabase
@@ -185,6 +264,11 @@ function setStreamingLive(name, isLive) {
 }
 
 function toggleStreaming(name) {
+    if (!isAdminAuthenticated) {
+        showAdminModal();
+        return;
+    }
+    
     const isCurrentlyLive = memberLiveStatus[name];
     const newStatus = !isCurrentlyLive;
     setStreamingLive(name, newStatus);
@@ -220,6 +304,10 @@ function toggleStreaming(name) {
 window.setStreamingLive = setStreamingLive;
 window.toggleStreaming = toggleStreaming;
 window.setMemberLive = (name, isLive) => setStreamingLive(name, isLive);
+
+document.addEventListener('DOMContentLoaded', () => {
+    initAdminAuth();
+});
 
 setTimeout(() => {
     console.log('%cINCOGNITO CONSOLE READY', 'color: #00ff00; font-size: 14px; font-weight: bold;');
